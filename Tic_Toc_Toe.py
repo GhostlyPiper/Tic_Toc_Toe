@@ -1,5 +1,5 @@
-User_1 = 'X'
-User_2 = '0'
+USER_1 = 'X'
+USER_2 = '0'
 
 
 def greet():
@@ -138,22 +138,23 @@ def check_win():
 
     mask = list()
     q = 0
-
+    r = 0
+    
     for cord in win_cord:
         symbols = []
 
         for c in cord:
             symbols.append(field[c[0]][c[1]])
 
-        if symbols == [User_1, User_1, User_1]:
-            print(f"\033[1;33m Выиграл Игрок 1 '{User_1}' !!! \033[0m")
+        if symbols == [USER_1, USER_1, USER_1]:
+            print(f"\033[1;33m Выиграл Игрок 1 '{USER_1}' !!! \033[0m")
             return True
 
-        if symbols == [User_2, User_2, User_2]:
-            print(f"\033[1;33m Выиграл Игрок 2 '{User_2}' !!! \033[0m")
+        if symbols == [USER_2, USER_2, USER_2]:
+            print(f"\033[1;33m Выиграл Игрок 2 '{USER_2}' !!! \033[0m")
             return True
 
-        if count == 7 and q == 3:
+        if count == 7 and q == 3 and r < 2:
             print((("\033[1;31m В этой партии уже никто не выиграет - "
                     "редкая комбинация вничью!!! \033[0m")))
 
@@ -161,9 +162,15 @@ def check_win():
             return a
 
         mask.extend([symbols])
-        q = mask.count([User_2, User_1, User_1]) \
-            + mask.count([User_1, User_1, User_2])
-
+        
+        q = mask.count([USER_2, USER_1, USER_1]) \
+            + mask.count([USER_1, USER_1, USER_2])
+        
+        r = mask.count([USER_1, USER_1, ' ']) + \
+            mask.count([' ', USER_1, USER_1]) + \
+            mask.count([' ', USER_2, USER_2]) + \
+            mask.count([USER_2, USER_2, ' '])
+        
     return False
 
 
@@ -176,9 +183,9 @@ while key:
     count += 1
     show()
     if count % 2 == 1:
-        print("\033[3;36m Ходит Игрок 1 - 'X' \033[0m")
+        print(f"\033[3;36m Ходит Игрок 1 - '{USER_1}' \033[0m")
     else:
-        print("\033[3;36m Ходит Игрок 2 - '0' \033[0m")
+        print(f"\033[3;36m Ходит Игрок 2 - '{USER_2}' \033[0m")
 
     x, y = ask()
 
