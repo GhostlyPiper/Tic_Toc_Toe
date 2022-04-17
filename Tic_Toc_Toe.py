@@ -1,5 +1,11 @@
 USER_1 = 'X'
 USER_2 = '0'
+QUES_1 = ("Нажмите - Y чтобы поиграть, \
+    \nНажмите - N для выхода.\n\033[1;32m Ваш выбор: \033[0m")
+QUES_2 = ("\nСыграем ещё партию - Y, \
+    \nДля выхода из игры - N \n\033[1;32m Ваш выбор: \033[0m")
+QUES_3 = ("Согласны с очевидным - Y, \
+    \nесть желание убедиться - N \n\033[1;32m Ваш выбор: \033[0m")
 
 
 def greet():
@@ -66,62 +72,27 @@ def ask():
         return x, y
 
 
-def yes_no(x):
+def yes_no(question):
     """
-    Эта функция проверяет ввод пользователем 'Yes' или 'No'.
+    Эта функция возвращает True либо False в зависимости от ответа
+    пользователя на вопрос блока программы.
     """
+
+    ans = input(question)
 
     while True:
         yes_ = ('Y', 'y', 'Н', 'н')
         no_ = ('N', 'n', 'Т', 'т')
 
-        if x not in yes_ and x not in no_:
-            x = input(str("\033[1;31m Введите Y или N !!! : \033[0m"))
+        if ans not in yes_ and ans not in no_:
+            ans = input(str("\033[1;31m Введите Y или N !!! : \033[0m"))
             continue
 
-        if x in yes_:
+        if ans in yes_:
             return True
 
-        if x in no_:
+        if ans in no_:
             return False
-
-
-def start_stop():
-    """
-    Эта функция запускает или завершает игру.
-    """
-
-    ans = input(str("Нажмите - Y чтобы поиграть, \
-    \nНажмите - N для выхода.\n\033[1;32m Ваш выбор: \033[0m"))
-
-    result = yes_no(ans)
-    return result
-
-
-def exit_no():
-    """
-    Эта функция досрочно завершает игру при наступлении
-    определённых условий либо позволяет ей работать дальше.
-    """
-
-    ans = input(str("Согласны с очевидным - Y, \
-    \nесть желание убедиться - N \n\033[1;32m Ваш выбор: \033[0m"))
-
-    result = yes_no(ans)
-    return result
-
-
-def return_game():
-    """
-    Эта функция спрашивает у пользователя согласие
-    на новый раунд игры либо выход из неё.
-    """
-
-    ans = input(str("\nСыграем ещё партию - Y, \
-    \nДля выхода из игры - N \n\033[1;32m Ваш выбор: \033[0m"))
-
-    result = yes_no(ans)
-    return result
 
 
 def check_win():
@@ -158,7 +129,7 @@ def check_win():
             print((("\033[1;31m В этой партии уже никто не выиграет - "
                     "редкая комбинация вничью!!! \033[0m")))
 
-            a = exit_no()
+            a = yes_no(QUES_3)
             return a
 
         mask.extend([symbols])
@@ -177,8 +148,8 @@ def check_win():
 greet()
 field = [[" "] * 3 for i in range(3)]
 count = 0
-key = start_stop()
-while key:
+start = yes_no(QUES_1)
+while start:
 
     count += 1
     show()
@@ -191,18 +162,19 @@ while key:
 
     if count % 2 == 1:
         field[x][y] = "X"
+
     else:
         field[x][y] = "0"
 
     if check_win():
-        key = return_game()
-        field = [[" "] * 3 for i in range(3)]
-        count = 0
+        start = yes_no(QUES_2)
+        field = [[" "] * 3 for i in range(3)]  # Очищаем игровое поле для нового раунда игры.
+        count = 0  # обнуляем счётчик ходов для нового раунда игры.
         continue
 
     if count == 9:
         print("\033[1;33m Ничья! \033[0m")
-        key = return_game()
+        start = yes_no(QUES_2)
         field = [[" "] * 3 for i in range(3)]
         count = 0
         continue
